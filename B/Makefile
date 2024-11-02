@@ -7,7 +7,7 @@ $(PROGRAM): $(SRC)
 	$(CC) $(CFLAGS) -o $@ $<
 
 test: test.cc
-	@$(CC) -o $@ $<
+	@$(CC) -D TEST -o $@ $<
 	@./$@
 
 .PHONY: clean test

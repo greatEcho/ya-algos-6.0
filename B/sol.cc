@@ -1,5 +1,8 @@
+#include <cassert>
 #include <iostream>
+
 using std::cin; using std::cout; using std::endl;
+
 typedef unsigned long int ulint;
 
 struct Answer {
@@ -28,12 +31,25 @@ Answer variant2(ulint num_bluet, ulint num_redt,
 Answer solution(ulint num_bluet, ulint num_redt, 
               ulint num_blues, ulint num_reds)
 {
+  // we should have atleast one pair of tshirts and socks
+  assert(num_bluet != 0 || num_reds != 0);
+  assert(num_redt != 0 || num_blues != 0);
+
   Answer ans1, ans2;
+  // if one of values is zero
+  if (!(num_bluet && num_redt && num_blues && num_reds)) {
+    if (num_bluet == 0) return Answer(1, num_blues + 1);
+    if (num_redt == 0)  return Answer(1, num_reds + 1);
+    if (num_blues == 0) return Answer(num_bluet + 1, 1);
+    if (num_reds == 0) return Answer(num_redt + 1, 1);
+    assert(1 == 0);
+  }
   ans1 = variant1(num_bluet, num_redt, num_blues, num_reds);
   ans2 = variant2(num_bluet, num_redt, num_blues, num_reds);
   
   //cout << ans1.num_tshirts << " " << ans1.num_socks << endl;
   //cout << ans2.num_tshirts << " " << ans2.num_socks << endl;
+  //cout << "------\n";
   return (ans1.sum() < ans2.sum()) ? ans1 : ans2;
 }
 
@@ -52,23 +68,6 @@ Answer variant1(ulint num_bluet, ulint num_redt,
     answer.num_tshirts = num_redt + 1;
     answer.num_socks = num_reds + 1;
   }
-
-
-
-#if 0
-  if (myMin(num_bluet, num_redt) == num_bluet) {
-    /* кол-во синих футболок меньше. Мы хотим, чтобы у нас гарантировано
-       был синий набор */
-    answer.num_tshirts = num_bluet + 1;
-    answer.num_socks = num_blues + 1;
-  }
-  if (myMin(num_bluet, num_redt) == num_redt) {
-    /* кол-во красных футболок меньше. Мы хотим, чтобы у нас гарантировано
-       был красный набор */
-    answer.num_tshirts = num_redt + 1;
-    answer.num_socks = num_reds + 1;
-  }
-#endif
 
   return answer;
 }
@@ -100,7 +99,7 @@ ulint myMax(const ulint a, const ulint b)
 }
 
 
-#ifdef TEST
+#ifndef TEST
 int main(void)
 {
   ulint num_bluet, num_redt, num_blues, num_reds;
